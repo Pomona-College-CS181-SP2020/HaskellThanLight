@@ -20,15 +20,45 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/githubuser/HaskellThanLight#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+    - base >=4.7 && <5
+ghc-options: -Wall
+default-extensions:
+- DuplicateRecordFields
+- FlexibleContexts
+- FlexibleInstances
+- GeneralizedNewtypeDeriving
+- LambdaCase
+- NamedFieldPuns
+- ScopedTypeVariables
+- OverloadedStrings
 
 library:
-  source-dirs: src
+  dependencies:
+    - base >=4.7 && <5
+    - aeson
+    - animate
+    - bytestring
+    - containers
+    - key-state
+    - linear
+    - lens
+    - mtl
+    - safe
+    - safe-exceptions
+    - sdl2
+    - sdl2-image
+    - sdl2-mixer
+    - sdl2-ttf
+    - StateVar
+    - text
+    - text-conversions
+    - random
+  source-dirs: library
 
 executables:
   HaskellThanLight-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         executable
     ghc-options:
     - -threaded
     - -rtsopts

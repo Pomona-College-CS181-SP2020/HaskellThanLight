@@ -1,17 +1,17 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.1.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 17f117a5a5f4541790ce3e3008484760842a1a3c2865336807286b7738e2e170
+-- hash: 6671ada2ede5fff1b599f8a4f2ceb3ce21b3fefd6ff64d8fe4fc39c3e8a0fb6b
 
 name:           HaskellThanLight
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/HaskellThanLight#readme>
-homepage:       https://github.com/githubuser/HaskellThanLight#readme
-bug-reports:    https://github.com/githubuser/HaskellThanLight/issues
-author:         Author name here
+homepage:       https://github.com/https://github.com/Pomona-College-CS181-SP2020/HaskellThanLight#readme
+bug-reports:    https://github.com/https://github.com/Pomona-College-CS181-SP2020/HaskellThanLight/issues
+author:         Berkay Adanali, Joe Brennan, Gabe daMotta
 maintainer:     example@example.com
 copyright:      2020 Author name here
 license:        BSD3
@@ -23,17 +23,52 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/HaskellThanLight
+  location: https://github.com/https://github.com/Pomona-College-CS181-SP2020/HaskellThanLight
 
 library
   exposed-modules:
-      Lib
+      HTL 
+      HTL.Effect.Clock
+      HTL.Effect.Camera
+      HTL.Effect.Logger
+      HTL.Effect.Renderer
+      HTL.Engine.Camera
+      HTL.Engine.Frame
+      HTL.Engine.Scene
+      HTL.Engine.Types
+      HTL.Manager.Scene
+      HTL.Scene.Title
+      HTL.Wrapper.SDLRenderer
+      HTL.Config
+      HTL.Resource
+      HTL.Runner
+      HTL.State
   other-modules:
       Paths_HaskellThanLight
   hs-source-dirs:
-      src
+      library
+  default-extensions: DuplicateRecordFields FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving LambdaCase NamedFieldPuns ScopedTypeVariables OverloadedStrings
+  ghc-options: -Wall
   build-depends:
-      base >=4.7 && <5
+      StateVar
+    , aeson
+    , animate
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , key-state
+    , lens
+    , linear
+    , mtl
+    , random
+    , safe
+    , safe-exceptions
+    , sdl2
+    , sdl2-image
+    , sdl2-mixer
+    , sdl2-ttf
+    , text
+    , text-conversions
   default-language: Haskell2010
 
 executable HaskellThanLight-exe
@@ -41,8 +76,9 @@ executable HaskellThanLight-exe
   other-modules:
       Paths_HaskellThanLight
   hs-source-dirs:
-      app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+      executable
+  default-extensions: DuplicateRecordFields FlexibleContexts FlexibleInstances GeneralizedNewtypeDeriving LambdaCase NamedFieldPuns ScopedTypeVariables OverloadedStrings
+  ghc-options: -Wall -rtsopts -threaded -with-rtsopts=-N  
   build-depends:
       HaskellThanLight
     , base >=4.7 && <5
