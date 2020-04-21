@@ -26,19 +26,16 @@ import HTL.State
 
 main :: IO ()
 main = do
-  putStrLn "Hello World2"
   SDL.initialize [SDL.InitVideo, SDL.InitAudio]
   window <- SDL.createWindow "Haskell Than Light" SDL.defaultWindow { SDL.windowInitialSize = V2 1280 720 }
   renderer <- SDL.createRenderer window (-1) SDL.defaultRenderer
   resources <- loadResources renderer
-  putStrLn "Hello World2"
   let cfg = Config
         { cWindow = window
         , cRenderer = renderer
         , cResources = resources
         }
   runHTL cfg initVars mainLoop
-  putStrLn "Hello World"
   SDL.destroyWindow window
   freeResources resources
   SDL.quit
