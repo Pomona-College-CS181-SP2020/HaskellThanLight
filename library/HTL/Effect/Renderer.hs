@@ -14,7 +14,13 @@ import HTL.Wrapper.SDLRenderer
 class Monad m => Renderer m where
   clearScreen :: m ()
   drawScreen :: m ()
-  drawGround :: (Int, Int) -> m ()
+  drawMenuBackground :: (Int, Int) -> m ()
+  drawNewGame :: (Int, Int) -> m ()
+  drawQuit :: (Int, Int) -> m ()
+  drawStars :: (Int, Int) -> m ()
+  drawKestral :: (Int, Int) -> m ()
+  drawKestralFloor :: (Int, Int) -> m ()
+  drawEnemyBox :: (Int, Int) -> m ()
 
 clearScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 clearScreen' = do
@@ -25,11 +31,6 @@ drawScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 drawScreen' = do
   renderer <- asks cRenderer
   presentRenderer renderer
-
---
-
-groundY :: Int
-groundY = 16 * 28
 
 --
 

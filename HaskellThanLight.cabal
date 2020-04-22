@@ -34,10 +34,14 @@ library
       HTL.Effect.Renderer
       HTL.Engine.Camera
       HTL.Engine.Frame
+      HTL.Engine.Input
       HTL.Engine.Scene
       HTL.Engine.Types
+      HTL.Manager.Input
       HTL.Manager.Scene
       HTL.Scene.Title
+      HTL.Scene.MainMenu
+      HTL.Wrapper.SDLInput
       HTL.Wrapper.SDLRenderer
       HTL.Config
       HTL.Resource
