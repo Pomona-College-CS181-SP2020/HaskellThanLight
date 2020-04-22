@@ -10,9 +10,13 @@ import qualified SDL.Raw.Video as Raw
 import qualified SDL.Internal.Numbered as Numbered
 
 data Resources = Resources
-  { rGroundSprites :: SDL.Texture
-  -- , rShipBaseSprites :: SDL.Texture
-  -- , rShipRoomSprites :: SDL.Texture
+  { rMenuBackgroundSprite :: SDL.Texture
+  , rNewGameSprite :: SDL.Texture
+  , rQuitSprite :: SDL.Texture
+  , rStarSprite :: SDL.Texture 
+  , rKestralBaseSprite :: SDL.Texture
+  , rKestralFloorSprite :: SDL.Texture
+  , rEnemyBoxSprite :: SDL.Texture
   }
 
 -- | Produce a new 'SDL.Surface' based on an existing one, but
@@ -38,9 +42,21 @@ alphaColorDef = (0xff,0x00,0xff)
 
 loadResources :: SDL.Renderer -> IO Resources
 loadResources renderer = do
-  ground <- loadTexture "ftl-dats/img/ship/kestral_base.png" (Just alphaColorDef)
+  menuBackground <- loadTexture "ftl-dats/img/main_menus/main_base2.png" (Just alphaColorDef)
+  newGame <- loadTexture "ftl-dats/img/main_menus/start_off.png" (Just alphaColorDef)
+  quit <- loadTexture "ftl-dats/img/main_menus/quit_off.png" (Just alphaColorDef)
+  stars <- loadTexture "ftl-dats/img/stars/bg_dullstars.png" (Just alphaColorDef)
+  kestralBase <- loadTexture "ftl-dats/img/ship/kestral_base.png" (Just alphaColorDef)
+  kestralFloor <- loadTexture "ftl-dats/img/ship/kestral_floor.png" (Just alphaColorDef)
+  enemyBox  <- loadTexture "ftl-dats/img/combatUI/box_hostiles2.png" (Just alphaColorDef)
   return Resources
-    { rGroundSprites = ground
+    { rMenuBackgroundSprite = menuBackground
+    , rNewGameSprite = newGame
+    , rQuitSprite = quit
+    , rStarSprite = stars
+    , rKestralBaseSprite = kestralBase
+    , rKestralFloorSprite = kestralFloor
+    , rEnemyBoxSprite = enemyBox
     }
   where
     toTexture surface = SDL.createTextureFromSurface renderer surface
@@ -48,4 +64,10 @@ loadResources renderer = do
 
 freeResources :: Resources -> IO ()
 freeResources r = do
-  SDL.destroyTexture (rGroundSprites r)
+  SDL.destroyTexture (rQuitSprite r)
+  SDL.destroyTexture (rNewGameSprite r)
+  SDL.destroyTexture (rMenuBackgroundSprite r)
+  SDL.destroyTexture (rStarSprite r)
+  SDL.destroyTexture (rEnemyBoxSprite r)
+  SDL.destroyTexture (rKestralBaseSprite r)
+  SDL.destroyTexture (rKestralFloorSprite r)

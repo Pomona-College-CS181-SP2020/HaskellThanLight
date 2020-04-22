@@ -11,6 +11,8 @@ import KeyState
 import HTL.Config
 import HTL.Effect.Renderer
 import HTL.Engine.Frame
+import HTL.Engine.Input
+import HTL.Manager.Input
 import HTL.Manager.Scene
 
 class Monad m => Title m where
@@ -22,4 +24,7 @@ titleStep' = do
 
 drawTitle :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
 drawTitle = do
-  drawGround (0, groundY)
+  drawStars (0, 0)
+  drawKestral (16 * 8, 16 * 10)
+  drawKestralFloor (16 * 10 + 12, 16 * 16)
+  drawEnemyBox (16 * 54, 16 * 2)
