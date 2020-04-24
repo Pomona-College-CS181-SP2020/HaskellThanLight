@@ -39,7 +39,7 @@ library
       HTL.Engine.Types
       HTL.Manager.Input
       HTL.Manager.Scene
-      HTL.Scene.Title
+      HTL.Scene.Combat
       HTL.Scene.MainMenu
       HTL.Wrapper.SDLInput
       HTL.Wrapper.SDLRenderer

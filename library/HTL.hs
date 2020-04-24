@@ -23,7 +23,7 @@ import HTL.Manager.Input
 import HTL.Manager.Scene
 import HTL.Resource
 import HTL.Runner
-import HTL.Scene.Title
+import HTL.Scene.Combat
 import HTL.Scene.MainMenu
 import HTL.State
 
@@ -81,10 +81,12 @@ instance Renderer HTL where
   drawStars = drawTextureSprite (rStarSprite . cResources)
   drawKestral = drawTextureSprite (rKestralBaseSprite . cResources)
   drawKestralFloor = drawTextureSprite (rKestralFloorSprite . cResources)
+  drawKestralRooms = drawTextureSprite (rKestralRoomsSprite . cResources)
   drawEnemyBox = drawTextureSprite (rEnemyBoxSprite . cResources)
+  drawEnemyShip = drawTextureSprite (rEnemyShipSprite . cResources)
 
-instance Title HTL where
-  titleStep = titleStep'
+instance Combat HTL where
+  combatStep = combatStep'
 
 instance MainMenu HTL where
   menuStep = menuStep'

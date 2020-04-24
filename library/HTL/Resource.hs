@@ -16,7 +16,9 @@ data Resources = Resources
   , rStarSprite :: SDL.Texture 
   , rKestralBaseSprite :: SDL.Texture
   , rKestralFloorSprite :: SDL.Texture
+  , rKestralRoomsSprite :: SDL.Texture
   , rEnemyBoxSprite :: SDL.Texture
+  , rEnemyShipSprite :: SDL.Texture
   }
 
 -- | Produce a new 'SDL.Surface' based on an existing one, but
@@ -48,7 +50,9 @@ loadResources renderer = do
   stars <- loadTexture "ftl-dats/img/stars/bg_dullstars.png" (Just alphaColorDef)
   kestralBase <- loadTexture "ftl-dats/img/ship/kestral_base.png" (Just alphaColorDef)
   kestralFloor <- loadTexture "ftl-dats/img/ship/kestral_floor.png" (Just alphaColorDef)
+  kestralRooms <- loadTexture "ftl-dats/img/ship/floorIconsKestrel.png" (Just alphaColorDef)
   enemyBox  <- loadTexture "ftl-dats/img/combatUI/box_hostiles2.png" (Just alphaColorDef)
+  enemyShip <- loadTexture "ftl-dats/img/ship/mantis_cruiser_3_base.png" (Just alphaColorDef)
   return Resources
     { rMenuBackgroundSprite = menuBackground
     , rNewGameSprite = newGame
@@ -56,7 +60,9 @@ loadResources renderer = do
     , rStarSprite = stars
     , rKestralBaseSprite = kestralBase
     , rKestralFloorSprite = kestralFloor
+    , rKestralRoomsSprite = kestralRooms
     , rEnemyBoxSprite = enemyBox
+    , rEnemyShipSprite = enemyShip
     }
   where
     toTexture surface = SDL.createTextureFromSurface renderer surface
@@ -71,3 +77,5 @@ freeResources r = do
   SDL.destroyTexture (rEnemyBoxSprite r)
   SDL.destroyTexture (rKestralBaseSprite r)
   SDL.destroyTexture (rKestralFloorSprite r)
+  SDL.destroyTexture (rKestralRoomsSprite r)
+  SDL.destroyTexture (rEnemyShipSprite r)
