@@ -21,7 +21,7 @@ class Monad m => MainMenu m where
 menuStep' :: (MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m) => m ()
 menuStep' = do
   input <- getInput
-  when (ksStatus (iSpace input) == KeyStatus'Pressed) (toScene Scene'Title)
+  when (ksStatus (iSpace input) == KeyStatus'Pressed) (toScene Scene'Combat)
   drawMenu
 
 drawMenu :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()

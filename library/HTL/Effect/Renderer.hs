@@ -20,7 +20,9 @@ class Monad m => Renderer m where
   drawStars :: (Int, Int) -> m ()
   drawKestral :: (Int, Int) -> m ()
   drawKestralFloor :: (Int, Int) -> m ()
+  drawKestralRooms :: (Int, Int) -> m ()
   drawEnemyBox :: (Int, Int) -> m ()
+  drawEnemyShip :: (Int, Int) -> m()
 
 clearScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 clearScreen' = do

@@ -17,13 +17,13 @@ import HTL.Engine.Frame
 import HTL.Engine.Input
 import HTL.Manager.Input
 import HTL.Manager.Scene
-import HTL.Scene.Title
+import HTL.Scene.Combat
 import HTL.Scene.MainMenu
 
 import HTL.State
 
-titleTransition :: (MonadState a m, CameraControl m) => m ()
-titleTransition = do
+combatTransition :: (MonadState a m, CameraControl m) => m ()
+combatTransition = do
   adjustCamera initCamera
 
 menuTransition :: (MonadState a m, CameraControl m) => m ()
@@ -41,7 +41,7 @@ mainLoop ::
   , CameraControl m
   , Renderer m
   , HasInput m
-  , Title m
+  , Combat m
   , MainMenu m
   ) => m ()
 mainLoop = do
@@ -60,12 +60,12 @@ mainLoop = do
 
     step scene = do
       case scene of
-        Scene'Title -> titleStep
+        Scene'Combat -> combatStep
         Scene'Menu -> menuStep
 
     stepScene scene nextScene = do
       when (nextScene /= scene) $ do
         case nextScene of
-          Scene'Title -> titleTransition
+          Scene'Combat -> combatTransition
           Scene'Menu -> menuTransition
         modify (\v -> v { vScene = nextScene })

@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module HTL.Scene.Title where
+module HTL.Scene.Combat where
 
 import qualified Animate
 import Control.Lens
@@ -15,16 +15,18 @@ import HTL.Engine.Input
 import HTL.Manager.Input
 import HTL.Manager.Scene
 
-class Monad m => Title m where
-  titleStep :: m ()
+class Monad m => Combat m where
+  combatStep :: m ()
 
-titleStep' :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
-titleStep' = do
-  drawTitle
+combatStep' :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
+combatStep' = do
+  drawCombat
 
-drawTitle :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
-drawTitle = do
+drawCombat :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
+drawCombat = do
   drawStars (0, 0)
   drawKestral (16 * 8, 16 * 10)
-  drawKestralFloor (16 * 10 + 12, 16 * 16)
+  drawKestralFloor (16 * 10 + 13, 16 * 16 - 2)
+  drawKestralRooms (16 * 11 + 10, 16 * 16 + 7)
   drawEnemyBox (16 * 54, 16 * 2)
+  drawEnemyShip (16 * 56, 16 * 4)
