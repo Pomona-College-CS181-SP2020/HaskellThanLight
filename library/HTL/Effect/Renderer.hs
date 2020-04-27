@@ -23,6 +23,12 @@ class Monad m => Renderer m where
   drawKestralRooms :: (Int, Int) -> m ()
   drawEnemyBox :: (Int, Int) -> m ()
   drawEnemyShip :: (Int, Int) -> m()
+  drawHullHealth :: (Int,Int) -> m()
+  drawHullHealthMask :: (Int, Int) -> m()
+  drawFuelCounter :: (Int, Int) -> m()
+  drawJumpButton :: (Int, Int) -> m()
+  drawSubsystems :: (Int, Int) -> m()
+  drawSystems :: (Int, Int) -> m()
 
 clearScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 clearScreen' = do
