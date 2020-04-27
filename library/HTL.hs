@@ -84,6 +84,12 @@ instance Renderer HTL where
   drawKestralRooms = drawTextureSprite (rKestralRoomsSprite . cResources)
   drawEnemyBox = drawTextureSprite (rEnemyBoxSprite . cResources)
   drawEnemyShip = drawTextureSprite (rEnemyShipSprite . cResources)
+  drawHullHealth = drawTextureSprite (rHullHealthSprite . cResources)
+  drawHullHealthMask = drawTextureSprite (rHullHealthMaskSprite . cResources)
+  drawFuelCounter = drawTextureSprite (rFuelCounterSprite . cResources)
+  drawJumpButton = drawTextureSprite (rJumpButtonSprite . cResources)
+  drawSubsystems = drawTextureSprite (rSubsystemsSprite . cResources)
+  drawSystems = drawTextureSprite (rSystemsSprite . cResources)
 
 instance Combat HTL where
   combatStep = combatStep'

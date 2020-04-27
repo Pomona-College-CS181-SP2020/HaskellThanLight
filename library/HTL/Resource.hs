@@ -19,6 +19,12 @@ data Resources = Resources
   , rKestralRoomsSprite :: SDL.Texture
   , rEnemyBoxSprite :: SDL.Texture
   , rEnemyShipSprite :: SDL.Texture
+  , rHullHealthSprite :: SDL.Texture
+  , rHullHealthMaskSprite :: SDL.Texture
+  , rFuelCounterSprite :: SDL.Texture
+  , rJumpButtonSprite :: SDL.Texture
+  , rSubsystemsSprite :: SDL.Texture
+  , rSystemsSprite :: SDL.Texture
   }
 
 -- | Produce a new 'SDL.Surface' based on an existing one, but
@@ -53,6 +59,12 @@ loadResources renderer = do
   kestralRooms <- loadTexture "ftl-dats/img/ship/floorIconsKestrel.png" (Just alphaColorDef)
   enemyBox  <- loadTexture "ftl-dats/img/combatUI/box_hostiles2.png" (Just alphaColorDef)
   enemyShip <- loadTexture "ftl-dats/img/ship/mantis_cruiser_3_base.png" (Just alphaColorDef)
+  hullHealth <- loadTexture "ftl-dats/img/statusUI/top_hull.png" (Just alphaColorDef)
+  hullHealthMask <- loadTexture "ftl-dats/img/statusUI/top_hull_bar_mask.png" (Just alphaColorDef)
+  fuelCounter <- loadTexture "ftl-dats/img/systemUI/fuel_counter.PNG" (Just alphaColorDef)
+  jumpButton <- loadTexture "ftl-dats/img/systemUI/jump_button.PNG" (Just alphaColorDef)
+  subsystems <- loadTexture "ftl-dats/img/systemUI/subsystems.PNG" (Just alphaColorDef)
+  systems <- loadTexture "ftl-dats/img/systemUI/weapons_systems.png" (Just alphaColorDef)
   return Resources
     { rMenuBackgroundSprite = menuBackground
     , rNewGameSprite = newGame
@@ -63,6 +75,12 @@ loadResources renderer = do
     , rKestralRoomsSprite = kestralRooms
     , rEnemyBoxSprite = enemyBox
     , rEnemyShipSprite = enemyShip
+    , rHullHealthSprite = hullHealth
+    , rHullHealthMaskSprite = hullHealthMask
+    , rFuelCounterSprite = fuelCounter
+    , rJumpButtonSprite = jumpButton
+    , rSubsystemsSprite = subsystems
+    , rSystemsSprite = systems
     }
   where
     toTexture surface = SDL.createTextureFromSurface renderer surface
@@ -79,3 +97,9 @@ freeResources r = do
   SDL.destroyTexture (rKestralFloorSprite r)
   SDL.destroyTexture (rKestralRoomsSprite r)
   SDL.destroyTexture (rEnemyShipSprite r)
+  SDL.destroyTexture (rHullHealthSprite r)
+  SDL.destroyTexture (rHullHealthMaskSprite r)
+  SDL.destroyTexture (rFuelCounterSprite r)
+  SDL.destroyTexture (rJumpButtonSprite r)
+  SDL.destroyTexture (rSubsystemsSprite r)
+  SDL.destroyTexture (rSystemsSprite r)
