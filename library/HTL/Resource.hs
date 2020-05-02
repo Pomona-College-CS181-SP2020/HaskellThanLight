@@ -9,8 +9,12 @@ import SDL.Vect
 import qualified SDL.Raw.Video as Raw
 import qualified SDL.Internal.Numbered as Numbered
 
+import HTL.Engine.Types
+import HTL.Engine.Crew
+
 data Resources = Resources
-  { rMenuBackgroundSprite :: SDL.Texture
+  { rCrewSprites :: Animate.SpriteSheet CrewKey SDL.Texture Seconds
+  , rMenuBackgroundSprite :: SDL.Texture
   , rNewGameSprite :: SDL.Texture
   , rQuitSprite :: SDL.Texture
   , rStarSprite :: SDL.Texture 
@@ -25,6 +29,7 @@ data Resources = Resources
   , rJumpButtonSprite :: SDL.Texture
   , rSubsystemsSprite :: SDL.Texture
   , rSystemsSprite :: SDL.Texture
+  , rMarkSprite :: SDL.Texture
   }
 
 -- | Produce a new 'SDL.Surface' based on an existing one, but
@@ -65,6 +70,8 @@ loadResources renderer = do
   jumpButton <- loadTexture "ftl-dats/img/systemUI/jump_button.PNG" (Just alphaColorDef)
   subsystems <- loadTexture "ftl-dats/img/systemUI/subsystems.PNG" (Just alphaColorDef)
   systems <- loadTexture "ftl-dats/img/systemUI/weapons_systems.png" (Just alphaColorDef)
+  mark <- loadTexture "ftl-dats/img/debug_dot.png" (Just alphaColorDef)
+  crewSprites <- Animate.readSpriteSheetJSON loadTexture "ftl-dats/anim/crew.json" :: IO (Animate.SpriteSheet CrewKey SDL.Texture Seconds)
   return Resources
     { rMenuBackgroundSprite = menuBackground
     , rNewGameSprite = newGame
@@ -81,6 +88,8 @@ loadResources renderer = do
     , rJumpButtonSprite = jumpButton
     , rSubsystemsSprite = subsystems
     , rSystemsSprite = systems
+    , rMarkSprite = mark
+    , rCrewSprites = crewSprites
     }
   where
     toTexture surface = SDL.createTextureFromSurface renderer surface
@@ -103,3 +112,4 @@ freeResources r = do
   SDL.destroyTexture (rJumpButtonSprite r)
   SDL.destroyTexture (rSubsystemsSprite r)
   SDL.destroyTexture (rSystemsSprite r)
+  SDL.destroyTexture (rMarkSprite r)

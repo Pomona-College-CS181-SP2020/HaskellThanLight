@@ -9,11 +9,14 @@ import Control.Monad.Reader
 
 import HTL.Config
 import HTL.Engine.Types
+import HTL.Engine.Crew
 import HTL.Wrapper.SDLRenderer
 
 class Monad m => Renderer m where
   clearScreen :: m ()
   drawScreen :: m ()
+  getCrewAnimations :: m (Animations CrewKey)
+  drawCrew :: DrawSprite CrewKey m
   drawMenuBackground :: (Int, Int) -> m ()
   drawNewGame :: (Int, Int) -> m ()
   drawQuit :: (Int, Int) -> m ()
@@ -29,6 +32,7 @@ class Monad m => Renderer m where
   drawJumpButton :: (Int, Int) -> m()
   drawSubsystems :: (Int, Int) -> m()
   drawSystems :: (Int, Int) -> m()
+  drawMark :: (Int,Int) -> m()
 
 clearScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 clearScreen' = do

@@ -90,6 +90,7 @@ instance Renderer HTL where
   drawJumpButton = drawTextureSprite (rJumpButtonSprite . cResources)
   drawSubsystems = drawTextureSprite (rSubsystemsSprite . cResources)
   drawSystems = drawTextureSprite (rSystemsSprite . cResources)
+  drawMark =  drawTextureSprite (rMarkSprite . cResources)
 
 instance Combat HTL where
   combatStep = combatStep'
