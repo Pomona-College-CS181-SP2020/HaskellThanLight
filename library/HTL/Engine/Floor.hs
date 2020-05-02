@@ -3,6 +3,7 @@ module HTL.Engine.Floor where
 import qualified Safe
 import Linear (V2(..))
 import Data.List
+import Data.Function
 
 import HTL.Engine.Types
 
@@ -96,13 +97,13 @@ buildFloorKestrel =
 findShortestPath' :: FloorState -> (Int,Int) -> (Int,Int) -> [(Int,Int)] -> Maybe [(Int,Int)]
 findShortestPath' floor (x,y) endTile acc =
   if (x,y) == endTile
-  then ((x,y):acc)
-  else case find (\ti -> tiPos ti == curTile) (fsTiles floor) of
-         Just tInfo -> if shortestPath < 50 then shortestPath else Nothing
+  then Just ((x,y):acc)
+  else case find (\ti -> tiPos ti == (x,y)) (fsTiles floor) of
+         Just tInfo -> if pathLength shortestPath < 50 then shortestPath else Nothing
             where
               xPath dir xChange yChange = 
-                if dir (tiAdjacent tInfo)
-                then findShortestPath' floor (x,y+1) endTile ((x,y):acc)
+                if dir (tiAdjacent tInfo) && (not $ (x,y) `elem` acc)
+                then findShortestPath' floor (x+xChange,y+yChange) endTile ((x,y):acc)
                 else Nothing
               upPath = xPath taUp 0 (-1)
               downPath = xPath taDown 0 1
@@ -112,8 +113,10 @@ findShortestPath' floor (x,y) endTile acc =
                 Just p' -> length p'
                 Nothing -> 50
               shortestPath = 
-                foldr (min . pathLength) 50 [upPath,downPath,rightPath,leftPath]
+                minimumBy (compare `on` pathLength) [upPath,downPath,rightPath,leftPath]
          Nothing -> Nothing
 
 findShortestPath :: FloorState -> (Int,Int) -> (Int,Int) -> Maybe [(Int,Int)]
-findShortestPath floor initTile endTile = reverse $ findShortestPath' floor initTile endTile []
+findShortestPath floor initTile endTile = case findShortestPath' floor initTile endTile [] of
+  Just path -> Just (reverse path)
+  Nothing -> Nothing
