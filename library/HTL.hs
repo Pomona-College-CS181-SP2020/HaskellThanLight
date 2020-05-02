@@ -17,11 +17,14 @@ import HTL.Effect.Camera
 import HTL.Effect.Clock
 import HTL.Effect.Logger
 import HTL.Effect.Renderer
+import HTL.Wrapper.SDLInput
 import HTL.Wrapper.SDLRenderer
+import HTL.Manager.Input
 import HTL.Manager.Scene
 import HTL.Resource
 import HTL.Runner
-import HTL.Scene.Title
+import HTL.Scene.Combat
+import HTL.Scene.MainMenu
 import HTL.State
 
 main :: IO ()
@@ -52,6 +55,14 @@ instance Clock HTL where
 instance Logger HTL where
   logText = liftIO . T.putStrLn
 
+instance HasInput HTL where
+  updateInput = updateInput'
+  getInput = getInput'
+  setInput = setInput'
+
+instance SDLInput HTL where
+  pollEventPayloads = pollEventPayloads'
+
 instance SDLRenderer HTL where
   drawTexture = drawTexture'
   presentRenderer = presentRenderer'
@@ -64,10 +75,28 @@ instance SceneManager HTL where
 instance Renderer HTL where
   clearScreen = clearScreen'
   drawScreen = drawScreen'
-  drawGround = drawTextureSprite (rGroundSprites . cResources)
+  drawMenuBackground = drawTextureSprite (rMenuBackgroundSprite . cResources)
+  drawNewGame = drawTextureSprite (rNewGameSprite . cResources)
+  drawQuit = drawTextureSprite (rQuitSprite . cResources)
+  drawStars = drawTextureSprite (rStarSprite . cResources)
+  drawKestral = drawTextureSprite (rKestralBaseSprite . cResources)
+  drawKestralFloor = drawTextureSprite (rKestralFloorSprite . cResources)
+  drawKestralRooms = drawTextureSprite (rKestralRoomsSprite . cResources)
+  drawEnemyBox = drawTextureSprite (rEnemyBoxSprite . cResources)
+  drawEnemyShip = drawTextureSprite (rEnemyShipSprite . cResources)
+  drawHullHealth = drawTextureSprite (rHullHealthSprite . cResources)
+  drawHullHealthMask = drawTextureSprite (rHullHealthMaskSprite . cResources)
+  drawFuelCounter = drawTextureSprite (rFuelCounterSprite . cResources)
+  drawJumpButton = drawTextureSprite (rJumpButtonSprite . cResources)
+  drawSubsystems = drawTextureSprite (rSubsystemsSprite . cResources)
+  drawSystems = drawTextureSprite (rSystemsSprite . cResources)
+  drawMark =  drawTextureSprite (rMarkSprite . cResources)
 
-instance Title HTL where
-  titleStep = titleStep'
+instance Combat HTL where
+  combatStep = combatStep'
+
+instance MainMenu HTL where
+  menuStep = menuStep'
 
 instance CameraControl HTL where
   adjustCamera = adjustCamera'

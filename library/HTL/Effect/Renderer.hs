@@ -9,12 +9,30 @@ import Control.Monad.Reader
 
 import HTL.Config
 import HTL.Engine.Types
+import HTL.Engine.Crew
 import HTL.Wrapper.SDLRenderer
 
 class Monad m => Renderer m where
   clearScreen :: m ()
   drawScreen :: m ()
-  drawGround :: (Int, Int) -> m ()
+  getCrewAnimations :: m (Animations CrewKey)
+  drawCrew :: DrawSprite CrewKey m
+  drawMenuBackground :: (Int, Int) -> m ()
+  drawNewGame :: (Int, Int) -> m ()
+  drawQuit :: (Int, Int) -> m ()
+  drawStars :: (Int, Int) -> m ()
+  drawKestral :: (Int, Int) -> m ()
+  drawKestralFloor :: (Int, Int) -> m ()
+  drawKestralRooms :: (Int, Int) -> m ()
+  drawEnemyBox :: (Int, Int) -> m ()
+  drawEnemyShip :: (Int, Int) -> m()
+  drawHullHealth :: (Int,Int) -> m()
+  drawHullHealthMask :: (Int, Int) -> m()
+  drawFuelCounter :: (Int, Int) -> m()
+  drawJumpButton :: (Int, Int) -> m()
+  drawSubsystems :: (Int, Int) -> m()
+  drawSystems :: (Int, Int) -> m()
+  drawMark :: (Int,Int) -> m()
 
 clearScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 clearScreen' = do
@@ -25,11 +43,6 @@ drawScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 drawScreen' = do
   renderer <- asks cRenderer
   presentRenderer renderer
-
---
-
-groundY :: Int
-groundY = 16 * 28
 
 --
 

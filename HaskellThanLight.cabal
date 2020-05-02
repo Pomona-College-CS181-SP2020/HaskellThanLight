@@ -34,10 +34,16 @@ library
       HTL.Effect.Renderer
       HTL.Engine.Camera
       HTL.Engine.Frame
+      HTL.Engine.Input
       HTL.Engine.Scene
       HTL.Engine.Types
+      HTL.Engine.Crew
+      HTL.Engine.Step
+      HTL.Manager.Input
       HTL.Manager.Scene
-      HTL.Scene.Title
+      HTL.Scene.Combat
+      HTL.Scene.MainMenu
+      HTL.Wrapper.SDLInput
       HTL.Wrapper.SDLRenderer
       HTL.Config
       HTL.Resource
@@ -86,7 +92,7 @@ executable HaskellThanLight-exe
 
 test-suite HaskellThanLight-test
   type: exitcode-stdio-1.0
-  main-is: Spec.hs
+  main-is: Main.hs
   other-modules:
       Paths_HaskellThanLight
   hs-source-dirs:
@@ -95,4 +101,5 @@ test-suite HaskellThanLight-test
   build-depends:
       HaskellThanLight
     , base >=4.7 && <5
+    , HUnit
   default-language: Haskell2010
