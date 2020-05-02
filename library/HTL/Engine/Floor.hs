@@ -3,10 +3,7 @@ module HTL.Engine.Floor where
 import qualified Safe
 import Linear (V2(..))
 import Data.List
-<<<<<<< HEAD
 import Data.Function
-=======
->>>>>>> f15a7fb51f94cd293c6a012d843b80f047abb1c1
 
 import HTL.Engine.Types
 
@@ -100,7 +97,6 @@ buildFloorKestrel =
 findShortestPath' :: FloorState -> (Int,Int) -> (Int,Int) -> [(Int,Int)] -> Maybe [(Int,Int)]
 findShortestPath' floor (x,y) endTile acc =
   if (x,y) == endTile
-<<<<<<< HEAD
   then Just ((x,y):acc)
   else case find (\ti -> tiPos ti == (x,y)) (fsTiles floor) of
          Just tInfo -> if pathLength shortestPath < 50 then shortestPath else Nothing
@@ -108,15 +104,6 @@ findShortestPath' floor (x,y) endTile acc =
               xPath dir xChange yChange = 
                 if dir (tiAdjacent tInfo) && (not $ (x,y) `elem` acc)
                 then findShortestPath' floor (x+xChange,y+yChange) endTile ((x,y):acc)
-=======
-  then ((x,y):acc)
-  else case find (\ti -> tiPos ti == curTile) (fsTiles floor) of
-         Just tInfo -> if shortestPath < 50 then shortestPath else Nothing
-            where
-              xPath dir xChange yChange = 
-                if dir (tiAdjacent tInfo)
-                then findShortestPath' floor (x,y+1) endTile ((x,y):acc)
->>>>>>> f15a7fb51f94cd293c6a012d843b80f047abb1c1
                 else Nothing
               upPath = xPath taUp 0 (-1)
               downPath = xPath taDown 0 1
@@ -126,7 +113,6 @@ findShortestPath' floor (x,y) endTile acc =
                 Just p' -> length p'
                 Nothing -> 50
               shortestPath = 
-<<<<<<< HEAD
                 minimumBy (compare `on` pathLength) [upPath,downPath,rightPath,leftPath]
          Nothing -> Nothing
 
@@ -134,10 +120,3 @@ findShortestPath :: FloorState -> (Int,Int) -> (Int,Int) -> Maybe [(Int,Int)]
 findShortestPath floor initTile endTile = case findShortestPath' floor initTile endTile [] of
   Just path -> Just (reverse path)
   Nothing -> Nothing
-=======
-                foldr (min . pathLength) 50 [upPath,downPath,rightPath,leftPath]
-         Nothing -> Nothing
-
-findShortestPath :: FloorState -> (Int,Int) -> (Int,Int) -> Maybe [(Int,Int)]
-findShortestPath floor initTile endTile = reverse $ findShortestPath' floor initTile endTile []
->>>>>>> f15a7fb51f94cd293c6a012d843b80f047abb1c1
