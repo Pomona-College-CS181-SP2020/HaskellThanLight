@@ -3,6 +3,8 @@ module Main where
 import Test.HUnit
 import Control.Monad
 
+import HTL.Engine.Floor
+
 test1 = TestCase (assertEqual "obviously true" 2 (1 + 1))
 test2 = TestCase (assertEqual "obviously false" 3 (1 + 1))
 
