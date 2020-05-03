@@ -43,6 +43,7 @@ library
       HTL.Manager.Scene
       HTL.Scene.Combat
       HTL.Scene.MainMenu
+      HTL.Scene.GameOver
       HTL.Wrapper.SDLInput
       HTL.Wrapper.SDLRenderer
       HTL.Config

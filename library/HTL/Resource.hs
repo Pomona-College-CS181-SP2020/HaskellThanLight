@@ -30,6 +30,7 @@ data Resources = Resources
   , rSubsystemsSprite :: SDL.Texture
   , rSystemsSprite :: SDL.Texture
   , rMarkSprite :: SDL.Texture
+  , rGameOverSprite :: SDL.Texture
   }
 
 -- | Produce a new 'SDL.Surface' based on an existing one, but
@@ -72,6 +73,7 @@ loadResources renderer = do
   systems <- loadTexture "ftl-dats/img/systemUI/weapons_systems.png" (Just alphaColorDef)
   mark <- loadTexture "ftl-dats/img/debug_dot.png" (Just alphaColorDef)
   crewSprites <- Animate.readSpriteSheetJSON loadTexture "ftl-dats/anim/crew.json" :: IO (Animate.SpriteSheet CrewKey SDL.Texture Seconds)
+  gameOver <- loadTexture "ftl-dats/img/scoreUI/gameover_main.png" (Just alphaColorDef)
   return Resources
     { rMenuBackgroundSprite = menuBackground
     , rNewGameSprite = newGame
@@ -90,6 +92,7 @@ loadResources renderer = do
     , rSystemsSprite = systems
     , rMarkSprite = mark
     , rCrewSprites = crewSprites
+    , rGameOverSprite = gameOver
     }
   where
     toTexture surface = SDL.createTextureFromSurface renderer surface
@@ -113,3 +116,4 @@ freeResources r = do
   SDL.destroyTexture (rSubsystemsSprite r)
   SDL.destroyTexture (rSystemsSprite r)
   SDL.destroyTexture (rMarkSprite r)
+  SDL.destroyTexture (rGameOverSprite r)
