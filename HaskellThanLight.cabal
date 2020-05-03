@@ -39,6 +39,7 @@ library
       HTL.Engine.Types
       HTL.Engine.Crew
       HTL.Engine.Step
+      HTL.Engine.Floor
       HTL.Manager.Input
       HTL.Manager.Scene
       HTL.Scene.Combat
