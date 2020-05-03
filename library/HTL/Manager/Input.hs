@@ -31,9 +31,8 @@ setInput' :: MonadState Vars m => Input -> m ()
 setInput' input = modify (\v -> v { vInput = input })
 
 stepControl :: [SDL.EventPayload] -> Input -> Input
-stepControl events Input{iSpace,iEscape} = Input
+stepControl events Input{iSpace} = Input
   { iSpace = next 1 [SDL.KeycodeSpace] iSpace
-  , iEscape = next 1 [SDL.KeycodeEscape] iEscape
   , iQuit = elem SDL.QuitEvent events
   , iMouseLeft = case find isJust $ map (mouseClick SDL.ButtonLeft) events of
                       Just pos -> pos

@@ -18,8 +18,11 @@ import HTL.Manager.Scene
 class Monad m => Combat m where
   combatStep :: m ()
 
-combatStep' :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
+combatStep' :: (MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m) => m ()
 combatStep' = do
+  input <- getInput
+  -- for testing gameover screen
+  when (clickAabb (iMouseLeft input) (0,0) (200,200)) (toScene Scene'GameOver)
   drawCombat
 
 drawCombat :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()

@@ -25,6 +25,7 @@ import HTL.Resource
 import HTL.Runner
 import HTL.Scene.Combat
 import HTL.Scene.MainMenu
+import HTL.Scene.GameOver
 import HTL.State
 
 main :: IO ()
@@ -91,12 +92,16 @@ instance Renderer HTL where
   drawSubsystems = drawTextureSprite (rSubsystemsSprite . cResources)
   drawSystems = drawTextureSprite (rSystemsSprite . cResources)
   drawMark =  drawTextureSprite (rMarkSprite . cResources)
+  drawGameOverBox = drawTextureSprite (rGameOverSprite . cResources)
 
 instance Combat HTL where
   combatStep = combatStep'
 
 instance MainMenu HTL where
   menuStep = menuStep'
+
+instance GameOver HTL where
+  gameOverStep = gameOverStep'
 
 instance CameraControl HTL where
   adjustCamera = adjustCamera'

@@ -19,6 +19,7 @@ import HTL.Manager.Input
 import HTL.Manager.Scene
 import HTL.Scene.Combat
 import HTL.Scene.MainMenu
+import HTL.Scene.GameOver
 
 import HTL.State
 
@@ -28,6 +29,10 @@ combatTransition = do
 
 menuTransition :: (MonadState a m, CameraControl m) => m ()
 menuTransition = do
+  adjustCamera initCamera
+
+gameOverTransition :: (MonadState a m, CameraControl m) => m ()
+gameOverTransition = do
   adjustCamera initCamera
 
 toScene' :: MonadState Vars m => Scene -> m ()
@@ -43,6 +48,7 @@ mainLoop ::
   , HasInput m
   , Combat m
   , MainMenu m
+  , GameOver m
   ) => m ()
 mainLoop = do
   updateInput
@@ -54,7 +60,7 @@ mainLoop = do
   delayMilliseconds frameDeltaMilliseconds
   nextScene <- gets vNextScene
   stepScene scene nextScene
-  let quit = iQuit input || ksStatus (iEscape input) == KeyStatus'Pressed
+  let quit = iQuit input
   unless quit mainLoop
   where
 
@@ -62,10 +68,12 @@ mainLoop = do
       case scene of
         Scene'Combat -> combatStep
         Scene'Menu -> menuStep
+        Scene'GameOver -> gameOverStep
 
     stepScene scene nextScene = do
       when (nextScene /= scene) $ do
         case nextScene of
           Scene'Combat -> combatTransition
           Scene'Menu -> menuTransition
+          Scene'GameOver -> gameOverTransition
         modify (\v -> v { vScene = nextScene })
