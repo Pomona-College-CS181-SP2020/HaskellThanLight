@@ -15,7 +15,7 @@ pathfinding2 = TestCase (assertEqual "longer pathfinding"
                          (findShortestPath buildFloorKestrel (6,0) (7,3)))
 pathfinding3 = TestCase (assertEqual "very long pathfinding" 
                          (Just [(0,2),(1,2),(2,2),(2,1),(3,1),(4,1),(4,2),(5,2),
-                         (6,2),(7,2),(7,1),(8,1),(8,2),(9,2),(10,2),(11,2)])
+                         (6,2),(6,1),(7,1),(8,1),(8,2),(9,2),(10,2),(11,2)])
                          (findShortestPath buildFloorKestrel (0,2) (11,2)))
 
 tests = TestList [TestLabel "test1" test1, TestLabel "test2" test2,
