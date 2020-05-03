@@ -24,13 +24,14 @@ menuStep' :: (MonadReader Config m, MonadState s m, Renderer m, HasInput m, Scen
 menuStep' = do
   input <- getInput
   when (clickAabb (iMouseLeft input) (967, 303) (230,32)) (toScene Scene'Combat)
+  when (clickAabb (iMouseLeft input) (1090, 370) (115,32)) (toScene Scene'Quit)
   drawMenu
 
 drawMenu :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
 drawMenu = do
   drawMenuBackground (0, 0)
   drawNewGame (16 * 60, 16 * 18)
-  -- drawMark (967,303) --debug mark
-  -- drawMark (967 + 230,303 + 32) --debug mark
+  -- drawMark (1090, 370) --debug mark
+  -- drawMark (1090 + 115, 370 + 32) --debug mark
   drawQuit (16 * 68, 16 * 22)
   

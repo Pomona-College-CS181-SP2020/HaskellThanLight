@@ -23,7 +23,7 @@ class Monad m => GameOver m where
 gameOverStep' :: (MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m) => m ()
 gameOverStep' = do
   input <- getInput
-  when (clickAabb (iMouseLeft input) (150, 100) (50,30)) (toScene Scene'Menu)
+  when (clickAabb (iMouseLeft input) (522, 285) (215, 54)) (toScene Scene'Menu)
   drawGameOver
 
 drawGameOver :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()

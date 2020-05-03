@@ -4,4 +4,5 @@ data Scene
   = Scene'Combat
   | Scene'Menu
   | Scene'GameOver
+  | Scene'Quit
   deriving (Show, Eq)

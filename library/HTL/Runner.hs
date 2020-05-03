@@ -60,7 +60,7 @@ mainLoop = do
   delayMilliseconds frameDeltaMilliseconds
   nextScene <- gets vNextScene
   stepScene scene nextScene
-  let quit = iQuit input
+  let quit = iQuit input || nextScene == Scene'Quit
   unless quit mainLoop
   where
 
@@ -69,6 +69,7 @@ mainLoop = do
         Scene'Combat -> combatStep
         Scene'Menu -> menuStep
         Scene'GameOver -> gameOverStep
+        Scene'Quit -> return ()
 
     stepScene scene nextScene = do
       when (nextScene /= scene) $ do
@@ -76,4 +77,5 @@ mainLoop = do
           Scene'Combat -> combatTransition
           Scene'Menu -> menuTransition
           Scene'GameOver -> gameOverTransition
+          Scene'Quit -> return ()
         modify (\v -> v { vScene = nextScene })
