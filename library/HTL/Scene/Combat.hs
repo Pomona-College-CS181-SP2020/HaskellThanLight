@@ -10,6 +10,7 @@ import KeyState
 
 import HTL.Config
 import HTL.Effect.Renderer
+import HTL.Engine.Combat
 import HTL.Engine.Frame
 import HTL.Engine.Input
 import HTL.Manager.Input
@@ -18,14 +19,17 @@ import HTL.Manager.Scene
 class Monad m => Combat m where
   combatStep :: m ()
 
-combatStep' :: (MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m) => m ()
+combatStep' :: (HasCombatVars s, MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m) => m ()
 combatStep' = do
   input <- getInput
   -- for testing gameover screen
   when (clickAabb (iMouseLeft input) (0,0) (200,200)) (toScene Scene'GameOver)
   drawCombat
+  when (clickAabb (iMouseLeft input) (304, 614) (96, 40)) (weaponSelected)
+  when (clickAabb (iMouseLeft input) (928, 96) (288, 448)) (weaponFired)
+  
 
-drawCombat :: (MonadReader Config m, MonadState s m, Renderer m, SceneManager m) => m ()
+drawCombat :: Renderer m => m ()
 drawCombat = do
   drawStars (0, 0)
   drawKestral (16 * 8, 16 * 10)
@@ -39,3 +43,20 @@ drawCombat = do
   drawJumpButton (16 * 30, 16 * 3)
   drawSubsystems (16 * 35, 16 * 37 + 8)
   drawSystems (16 * 4, 16 * 37 + 12)
+
+modifyCombatVars :: (MonadState s m, HasCombatVars s) => (CombatVars -> CombatVars) -> m ()
+modifyCombatVars f = modify $ combatVars %~ f
+  
+weaponSelected :: (MonadState s m, HasCombatVars s) => m ()
+weaponSelected = do
+  modifyCombatVars $ \cv -> cv { cvWeaponSelected = True }
+
+weaponFired :: (MonadState s m, HasCombatVars s) => m ()
+weaponFired = do
+  CombatVars{cvHull, cvWeaponSelected, cvCrewAnim} <- gets (view combatVars)
+  when cvWeaponSelected (shootEnemy)  
+
+shootEnemy :: (MonadState s m, HasCombatVars s) => m ()
+shootEnemy = do
+  --damage enemy ship
+  modifyCombatVars $ \cv -> cv { cvWeaponSelected = False }

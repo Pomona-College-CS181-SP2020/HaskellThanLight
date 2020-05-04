@@ -33,6 +33,7 @@ library
       HTL.Effect.Logger
       HTL.Effect.Renderer
       HTL.Engine.Camera
+      HTL.Engine.Combat
       HTL.Engine.Frame
       HTL.Engine.Input
       HTL.Engine.Scene

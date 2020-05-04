@@ -13,6 +13,7 @@ import HTL.Effect.Clock
 import HTL.Effect.Logger
 import HTL.Effect.Renderer
 import HTL.Engine.Camera
+import HTL.Engine.Combat
 import HTL.Engine.Frame
 import HTL.Engine.Input
 import HTL.Manager.Input
@@ -23,9 +24,10 @@ import HTL.Scene.GameOver
 
 import HTL.State
 
-combatTransition :: (MonadState a m, CameraControl m) => m ()
+combatTransition :: (HasCombatVars a, MonadState a m, CameraControl m) => m ()
 combatTransition = do
   adjustCamera initCamera
+  modify $ combatVars .~ initCombatVars
 
 menuTransition :: (MonadState a m, CameraControl m) => m ()
 menuTransition = do
