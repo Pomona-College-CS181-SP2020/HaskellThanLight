@@ -4,10 +4,6 @@ import Test.HUnit
 import Control.Monad
 
 import HTL.Engine.Floor
---test comment
-
-test1 = TestCase (assertEqual "obviously true" 2 (1 + 1))
-test2 = TestCase (assertEqual "obviously false" 3 (1 + 1))
 
 pathfinding1 = TestCase (assertEqual "simple pathfinding" (Just [(0,2),(1,2)])
                          (findShortestPath buildFloorKestrel (0,2) (1,2)))
@@ -19,8 +15,7 @@ pathfinding3 = TestCase (assertEqual "very long pathfinding"
                          (6,2),(6,1),(7,1),(8,1),(8,2),(9,2),(10,2),(11,2)])
                          (findShortestPath buildFloorKestrel (0,2) (11,2)))
 
-tests = TestList [TestLabel "test1" test1, TestLabel "test2" test2,
-                  TestLabel "pathfinding1" pathfinding1, TestLabel "pathfinding2" pathfinding2,
+tests = TestList [TestLabel "pathfinding1" pathfinding1, TestLabel "pathfinding2" pathfinding2,
                   TestLabel "pathfinding3" pathfinding3]
 
 main::IO Counts

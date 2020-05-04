@@ -28,4 +28,4 @@ install:
 
 script:
 # Build the package, its tests, and its docs and run the tests
-- stack ghc test/Main.hs
+- stack test
