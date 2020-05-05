@@ -29,6 +29,11 @@ mouseClick mousebutton event = case event of
     else Nothing
   _ -> Nothing
 
+mouseMoved :: SDL.EventPayload -> Maybe (Point V2 Int32)
+mouseMoved event = case event of
+  SDL.MouseMotionEvent SDL.MouseMotionEventData{mouseMotionEventPos = pos} -> Just pos
+  _ -> Nothing
+
 class Monad m => SDLInput m where
   pollEventPayloads :: m [SDL.EventPayload]
 

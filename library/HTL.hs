@@ -93,6 +93,7 @@ instance Renderer HTL where
   drawSystems = drawTextureSprite (rSystemsSprite . cResources)
   drawMark =  drawTextureSprite (rMarkSprite . cResources)
   drawGameOverBox = drawTextureSprite (rGameOverSprite . cResources)
+  drawWpnPtr = drawTextureSprite (rWpnPtrSprite . cResources)
 
 instance Combat HTL where
   combatStep = combatStep'
