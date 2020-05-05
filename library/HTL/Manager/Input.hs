@@ -40,6 +40,9 @@ stepControl events Input{iSpace} = Input
   , iMouseRight = case find isJust $ map (mouseClick SDL.ButtonRight) events of
                        Just pos -> pos
                        Nothing -> Nothing
+  , iMousePos = case find isJust $ map mouseMoved events of
+                    Just pos -> pos
+                    Nothing -> Nothing
   }
   where
     next count keycodes keystate

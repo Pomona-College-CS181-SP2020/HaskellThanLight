@@ -10,7 +10,8 @@ data Input = Input
   , iQuit :: Bool
   , iMouseLeft :: Maybe (Point V2 Int32)
   , iMouseRight :: Maybe (Point V2 Int32)
+  , iMousePos :: Maybe (Point V2 Int32)
   } deriving (Show, Eq)
 
 initInput :: Input
-initInput = Input initKeyState False Nothing Nothing
+initInput = Input initKeyState False Nothing Nothing Nothing
