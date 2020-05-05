@@ -4,9 +4,11 @@ module HTL.Scene.Combat where
 import qualified Animate
 import Control.Lens
 import Control.Monad (when)
+import Control.Monad.IO.Class
 import Control.Monad.Reader (MonadReader(..))
 import Control.Monad.State (MonadState(..), modify, gets)
 import KeyState
+import qualified SDL
 
 import HTL.Config
 import HTL.Effect.Renderer
@@ -19,7 +21,7 @@ import HTL.Manager.Scene
 class Monad m => Combat m where
   combatStep :: m ()
 
-combatStep' :: (HasCombatVars s, MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m) => m ()
+combatStep' :: (HasCombatVars s, MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m, Control.Monad.IO.Class.MonadIO m) => m ()
 combatStep' = do
   input <- getInput
   -- for testing gameover screen
@@ -47,16 +49,20 @@ drawCombat = do
 modifyCombatVars :: (MonadState s m, HasCombatVars s) => (CombatVars -> CombatVars) -> m ()
 modifyCombatVars f = modify $ combatVars %~ f
   
-weaponSelected :: (MonadState s m, HasCombatVars s) => m ()
+weaponSelected :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 weaponSelected = do
   modifyCombatVars $ \cv -> cv { cvWeaponSelected = True }
+  SDL.cursorVisible SDL.$= False
 
-weaponFired :: (MonadState s m, HasCombatVars s) => m ()
+weaponFired :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 weaponFired = do
   CombatVars{cvHull, cvWeaponSelected, cvCrewAnim} <- gets (view combatVars)
-  when cvWeaponSelected (shootEnemy)  
+  when cvWeaponSelected shootEnemy  
 
-shootEnemy :: (MonadState s m, HasCombatVars s) => m ()
+shootEnemy :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 shootEnemy = do
   --damage enemy ship
   modifyCombatVars $ \cv -> cv { cvWeaponSelected = False }
+  SDL.cursorVisible SDL.$= True
+
+--TODO: if right click when weapon selected, then unselect
