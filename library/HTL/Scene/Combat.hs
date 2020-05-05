@@ -52,17 +52,20 @@ drawCombat = do
   drawSystems (16 * 4, 16 * 37 + 12)
 
 updateCursor :: (MonadState s m, HasCombatVars s, Renderer m, HasInput m) => Maybe (Point V2 Int32) -> m ()
-updateCursor Nothing = return ()
+updateCursor Nothing = do
+  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnim} <- gets (view combatVars)
+  when cvWeaponSelected (drawWeaponPointer cvLastMousePos)
 updateCursor (Just pos) = do 
-  CombatVars{cvHull, cvWeaponSelected, cvCrewAnim} <- gets (view combatVars)
+  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnim} <- gets (view combatVars)
   when cvWeaponSelected (drawWeaponPointer pos)
+  modifyCombatVars $ \cv -> cv { cvLastMousePos = pos }
 
 drawWeaponPointer :: (MonadState s m, HasCombatVars s, Renderer m, HasInput m) => Point V2 Int32 -> m ()
 drawWeaponPointer pos = do
   let x = fromIntegral (pos ^._x)
   let y = fromIntegral (pos ^._y)
   drawWpnPtr (x, y)
-
+  
 
 modifyCombatVars :: (MonadState s m, HasCombatVars s) => (CombatVars -> CombatVars) -> m ()
 modifyCombatVars f = modify $ combatVars %~ f
