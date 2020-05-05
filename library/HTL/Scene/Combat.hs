@@ -2,6 +2,8 @@
 module HTL.Scene.Combat where
 
 import qualified Animate
+import SDL.Vect
+import GHC.Int
 import Control.Lens
 import Control.Monad (when)
 import Control.Monad.IO.Class
@@ -26,9 +28,12 @@ combatStep' = do
   input <- getInput
   -- for testing gameover screen
   when (clickAabb (iMouseLeft input) (0,0) (200,200)) (toScene Scene'GameOver)
+
   drawCombat
   when (clickAabb (iMouseLeft input) (304, 614) (96, 40)) (weaponSelected)
   when (clickAabb (iMouseLeft input) (928, 96) (288, 448)) (weaponFired)
+  when (clickAabb (iMouseRight input) (0, 0) (1280, 720)) (deselect)
+  updateCursor (iMousePos input)
   
 
 drawCombat :: Renderer m => m ()
@@ -46,6 +51,19 @@ drawCombat = do
   drawSubsystems (16 * 35, 16 * 37 + 8)
   drawSystems (16 * 4, 16 * 37 + 12)
 
+updateCursor :: (MonadState s m, HasCombatVars s, Renderer m, HasInput m) => Maybe (Point V2 Int32) -> m ()
+updateCursor Nothing = return ()
+updateCursor (Just pos) = do 
+  CombatVars{cvHull, cvWeaponSelected, cvCrewAnim} <- gets (view combatVars)
+  when cvWeaponSelected (drawWeaponPointer pos)
+
+drawWeaponPointer :: (MonadState s m, HasCombatVars s, Renderer m, HasInput m) => Point V2 Int32 -> m ()
+drawWeaponPointer pos = do
+  let x = fromIntegral (pos ^._x)
+  let y = fromIntegral (pos ^._y)
+  drawWpnPtr (x, y)
+
+
 modifyCombatVars :: (MonadState s m, HasCombatVars s) => (CombatVars -> CombatVars) -> m ()
 modifyCombatVars f = modify $ combatVars %~ f
   
@@ -53,6 +71,11 @@ weaponSelected :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.Monad
 weaponSelected = do
   modifyCombatVars $ \cv -> cv { cvWeaponSelected = True }
   SDL.cursorVisible SDL.$= False
+
+deselect :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
+deselect = do
+  modifyCombatVars $ \cv -> cv { cvWeaponSelected = False }
+  SDL.cursorVisible SDL.$= True
 
 weaponFired :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 weaponFired = do
@@ -62,7 +85,6 @@ weaponFired = do
 shootEnemy :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 shootEnemy = do
   --damage enemy ship
-  modifyCombatVars $ \cv -> cv { cvWeaponSelected = False }
-  SDL.cursorVisible SDL.$= True
+  deselect
 
 --TODO: if right click when weapon selected, then unselect
