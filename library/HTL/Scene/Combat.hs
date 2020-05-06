@@ -62,7 +62,6 @@ drawCombat = do
   drawEnemyShip (16 * 56, 16 * 4)
   drawHullHealth (16 * 4, 16 * 2)
   drawHullHealthMask (16 * 4 + 10, 16 * 2)
-  drawFuelCounter (16 * 23 + 10, 16 * 5)
   drawJumpButton (16 * 30, 16 * 3)
   drawSubsystems (16 * 35, 16 * 37 + 8)
   drawSystems (16 * 4, 16 * 37 + 12)
@@ -120,4 +119,3 @@ shootEnemy = do
 randomDamage :: Float
 randomDamage = 0.1 -- make this actually random
 
---TODO: if right click when weapon selected, then unselect

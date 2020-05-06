@@ -1,8 +1,18 @@
-.stack-work/
-sdl2-image/*
-sdl2/*
+# Ignore
+.stack-work/**
 test/Main.exe
 test/Main.hi
 test/Main.o
-
 *~
+
+#Allow
+!.stack-work/*/
+!.stack-work/install/**
+
+#Ignore again
+.stack-work/install/**/doc/
+.stack-work/install/**/lib/
+.stack-work/install/**/pkgdb/
+.stack-work/install/**/share/
+.stack-work/install/**/HaskellThanLight-exe.exe
+.stack-work/install/**/ftl-dats/
