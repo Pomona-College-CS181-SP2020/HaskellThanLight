@@ -1,5 +1,5 @@
 # Choose a build environment
-dist: bionic
+os: windows
 
 # Do not choose a language; we provide our own build tools.
 language: generic
@@ -21,6 +21,10 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://get.haskellstack.org/stable/linux-x86_64.tar.gz | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- cd ~/.local/bin
+- travis_retry curl -L https://get.haskellstack.org/stable/windows-x86_64.zip | unzip
+- stack exec -- pacman -S mingw64/mingw-w64-x86_64-pkg-config mingw64/mingw-w64-x86_64-SDL2 mingw64/mingw-w64-x86_64-SDL2_ttf mingw64/mingw-w64-x86_64-SDL2_image mingw64/mingw-w64-x86_64-SDL2_mixer mingw64/mingw-w64-x86_64-libmikmod
+
 
 install:
 # Build dependencies
