@@ -76,6 +76,8 @@ instance SceneManager HTL where
 instance Renderer HTL where
   clearScreen = clearScreen'
   drawScreen = drawScreen'
+  getCrewAnimations = getSpriteAnimations (rCrewSprites . cResources)
+  drawCrew = drawSprite (rCrewSprites . cResources)
   drawMenuBackground = drawTextureSprite (rMenuBackgroundSprite . cResources)
   drawNewGame = drawTextureSprite (rNewGameSprite . cResources)
   drawQuit = drawTextureSprite (rQuitSprite . cResources)

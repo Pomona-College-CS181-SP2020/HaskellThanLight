@@ -17,6 +17,8 @@ import HTL.Effect.Renderer
 import HTL.Engine.Combat
 import HTL.Engine.Frame
 import HTL.Engine.Input
+import HTL.Engine.Types
+import HTL.Engine.Crew
 import HTL.Manager.Input
 import HTL.Manager.Scene
 
@@ -36,8 +38,9 @@ combatStep' = do
   updateCursor (iMousePos input)
   
 
-drawCombat :: Renderer m => m ()
+drawCombat :: (MonadState s m, HasCombatVars s, Renderer m) => m ()
 drawCombat = do
+  -- textures
   drawStars (0, 0)
   drawKestral (16 * 8, 16 * 10)
   drawKestralFloor (16 * 10 + 13, 16 * 16 - 2)
@@ -50,13 +53,22 @@ drawCombat = do
   drawJumpButton (16 * 30, 16 * 3)
   drawSubsystems (16 * 35, 16 * 37 + 8)
   drawSystems (16 * 4, 16 * 37 + 12)
+  -- crew
+  CombatVars{cvCrewStates, cvCrewAnims} <- gets (view combatVars)
+  mapM_ drawEachCrew $ zip cvCrewStates cvCrewAnims
+
+drawEachCrew :: Renderer m => (CrewState, Animate.Position CrewKey Seconds) -> m ()
+drawEachCrew (cState, cAnim) = do
+  crewAnimations <- getCrewAnimations
+  let crewLoc = Animate.currentLocation crewAnimations cAnim
+  drawCrew crewLoc $ csPos cState
 
 updateCursor :: (MonadState s m, HasCombatVars s, Renderer m, HasInput m) => Maybe (Point V2 Int32) -> m ()
 updateCursor Nothing = do
-  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnim} <- gets (view combatVars)
+  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnims} <- gets (view combatVars)
   when cvWeaponSelected (drawWeaponPointer cvLastMousePos)
 updateCursor (Just pos) = do 
-  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnim} <- gets (view combatVars)
+  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnims} <- gets (view combatVars)
   when cvWeaponSelected (drawWeaponPointer pos)
   modifyCombatVars $ \cv -> cv { cvLastMousePos = pos }
 
@@ -82,7 +94,7 @@ deselect = do
 
 weaponFired :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 weaponFired = do
-  CombatVars{cvHull, cvWeaponSelected, cvCrewAnim} <- gets (view combatVars)
+  CombatVars{cvHull, cvWeaponSelected, cvCrewAnims} <- gets (view combatVars)
   when cvWeaponSelected shootEnemy  
 
 shootEnemy :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()

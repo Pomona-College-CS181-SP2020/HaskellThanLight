@@ -71,6 +71,9 @@ drawSprite ss clip (x,y) = do
     (Just clip')
     (Just $ SDL.Rectangle (SDL.P $ SDL.V2 (fromIntegral x) (fromIntegral y)) dim)
 
+getSpriteAnimations :: (MonadReader Config m) => (Config -> Animate.SpriteSheet key SDL.Texture Seconds) -> m (Animations key)
+getSpriteAnimations ss = asks (Animate.ssAnimations . ss)
+
 --
 
 rectFromClip :: Animate.SpriteClip key -> SDL.Rectangle CInt

@@ -2,6 +2,9 @@ module HTL.Engine.Crew where
 
 import qualified Safe
 import qualified Animate
+import SDL.Vect
+import GHC.Int
+import Control.Lens
 import Data.Text (Text)
 import Linear (V2(..))
 
@@ -9,6 +12,7 @@ import HTL.Engine.Camera
 import HTL.Engine.Frame
 import HTL.Engine.Types
 import HTL.Engine.Step
+import HTL.Engine.Floor
 
 data CrewAction
   = CrewAction'Idle
@@ -43,6 +47,12 @@ crewKey'keyName = \case
   CrewKey'Right -> "Right"
   CrewKey'Left -> "Left"
 
+initCrewState :: FloorState -> (Int,Int) -> CrewState
+initCrewState floor (tileX,tileY) =
+  CrewState False CrewAction'Idle 1 pos (tileX,tileY) Nothing
+  where
+    pos = ((fsOffset floor) ^._x + (tileX * 35), (fsOffset floor) ^._y + (tileY * 35))
+
 stepCrewAction :: Maybe [(Int,Int)] -> CrewState -> Step CrewAction
 stepCrewAction movesToDo cs = case ca of
   CrewAction'Idle -> case movesToDo of
@@ -68,7 +78,7 @@ stepCrewAction movesToDo cs = case ca of
 -- args: change in action, if selected on frame, current state
 -- returns: updated state
 -- stepCrewState :: Step CrewAction -> Bool -> CrewState -> CrewState
--- stepCrewState stepCa selected cs = case stepCa of
+-- stepCrewState stepCa slct cs = case stepCa of
 --   Step'Change _ ca -> case ca of
 --     CrewAction'Idle -> --stop moving (empty move list)
 --     CrewAction'Move -> --move towards first move
@@ -80,4 +90,9 @@ stepCrewAction movesToDo cs = case ca of
 --                      else --move not over
 --       Nothing -> --
 --   where
-    
+--     selected = slct
+--     nextAction
+--     health
+--     pos
+--     curtile
+--     movesToDo

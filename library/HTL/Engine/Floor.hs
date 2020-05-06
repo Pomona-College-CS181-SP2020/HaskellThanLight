@@ -2,6 +2,9 @@ module HTL.Engine.Floor where
 
 import qualified Safe
 import Linear (V2(..))
+import SDL.Vect
+import GHC.Int
+import Control.Lens
 import Data.List
 import Data.Function
 
@@ -22,10 +25,11 @@ data TileInfo = TileInfo
 data FloorState = FloorState
   { fsTiles :: [TileInfo]
   , fsMoveable :: Bool
+  , fsOffset :: Point V2 Int
   } deriving (Show, Eq)
 
-buildFloorKestrel :: FloorState
-buildFloorKestrel =
+floorKestrel :: FloorState
+floorKestrel =
   FloorState
   { fsTiles = 
     [ TileInfo (0,2) $ TileAdjacent False True True False
@@ -92,7 +96,11 @@ buildFloorKestrel =
     , TileInfo (14,3) $ TileAdjacent True False False True
     ]
   , fsMoveable = True
+  , fsOffset = P (V2 187 264)
   }
+
+tileSize :: Int
+tileSize = 35
 
 findShortestPath' :: FloorState -> (Int,Int) -> (Int,Int) -> [(Int,Int)] -> Maybe [(Int,Int)]
 findShortestPath' floor (x,y) endTile acc =
@@ -119,4 +127,15 @@ findShortestPath' floor (x,y) endTile acc =
 findShortestPath :: FloorState -> (Int,Int) -> (Int,Int) -> Maybe [(Int,Int)]
 findShortestPath floor initTile endTile = case findShortestPath' floor initTile endTile [] of
   Just path -> Just (reverse path)
+  Nothing -> Nothing
+
+findTileByPosition :: FloorState -> Maybe (Point V2 Int32) -> Maybe (Int,Int)
+findTileByPosition floor maybeMPos = case maybeMPos of
+  Just mPos -> if relX >= 0 && relY >= 0 &&
+                  relX < (15 * tileSize) && relY < (6 * tileSize)
+               then Just (relX `div` tileSize, relY `div` tileSize)
+               else Nothing
+               where
+                 relX = fromIntegral (mPos ^._x) - (fsOffset floor) ^._x
+                 relY = fromIntegral (mPos ^._y) - (fsOffset floor) ^._y
   Nothing -> Nothing
