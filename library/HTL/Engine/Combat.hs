@@ -7,23 +7,34 @@ import GHC.Int
 import Control.Lens
 
 import HTL.Engine.Crew
+import HTL.Engine.Floor
 import HTL.Engine.Types
 
 data CombatVars = CombatVars
   { cvHull :: Float
+  , cvEnemyHull :: Float
   , cvWeaponSelected :: Bool
   , cvLastMousePos :: Point V2 Int32
-  --, cvCrewState :: CrewState
-  , cvCrewAnim :: Animate.Position CrewKey Seconds
+  , cvCrewStates :: [CrewState]
+  , cvCrewAnims :: [Animate.Position CrewKey Seconds]
   } deriving (Show, Eq)
 
-makeClassy ''CombatVars 
+makeClassy ''CombatVars
 
 initCombatVars :: CombatVars
 initCombatVars = CombatVars
   { cvHull = 1
+  , cvEnemyHull = 1
   , cvWeaponSelected = False
   , cvLastMousePos = P (V2 0 0)
-  --, cvCrewState = CrewState False CrewAction'Idle 1 (V2 60 60) [] --Gotta Change stuff here
-  , cvCrewAnim = Animate.initPosition CrewKey'Idle
+  , cvCrewStates = 
+    [ initCrewState floorKestrel (5,2)
+    , initCrewState floorKestrel (8,3)
+    , initCrewState floorKestrel (14,2)
+    ] -- testing three crew members
+  , cvCrewAnims =
+    [ Animate.initPosition CrewKey'Idle
+    , Animate.initPosition CrewKey'Idle
+    , Animate.initPosition CrewKey'Idle
+    ]
   }

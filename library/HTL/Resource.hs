@@ -104,6 +104,7 @@ loadResources renderer = do
 
 freeResources :: Resources -> IO ()
 freeResources r = do
+  SDL.destroyTexture $ Animate.ssImage (rCrewSprites r)
   SDL.destroyTexture (rQuitSprite r)
   SDL.destroyTexture (rNewGameSprite r)
   SDL.destroyTexture (rMenuBackgroundSprite r)
