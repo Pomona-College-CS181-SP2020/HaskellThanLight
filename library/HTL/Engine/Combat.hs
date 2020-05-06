@@ -12,6 +12,7 @@ import HTL.Engine.Types
 
 data CombatVars = CombatVars
   { cvHull :: Float
+  , cvEnemyHull :: Float
   , cvWeaponSelected :: Bool
   , cvLastMousePos :: Point V2 Int32
   , cvCrewStates :: [CrewState]
@@ -23,6 +24,7 @@ makeClassy ''CombatVars
 initCombatVars :: CombatVars
 initCombatVars = CombatVars
   { cvHull = 1
+  , cvEnemyHull = 1
   , cvWeaponSelected = False
   , cvLastMousePos = P (V2 0 0)
   , cvCrewStates = 

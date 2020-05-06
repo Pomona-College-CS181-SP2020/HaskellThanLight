@@ -53,6 +53,15 @@ initCrewState floor (tileX,tileY) =
   where
     pos = ((fsOffset floor) ^._x + (tileX * 35), (fsOffset floor) ^._y + (tileY * 35))
 
+crewAabb :: Maybe (Point V2 Int32) -> CrewState -> Bool
+crewAabb maybePos cs = case maybePos of
+  Just pos -> checkX >= selfX + 6 && checkX < selfX + 29 &&
+              checkY >= selfY + 6 && checkY < selfY + 29
+                where 
+                  (selfX,selfY) = csPos cs
+                  (checkX,checkY) = (fromIntegral $ pos ^._x, fromIntegral $ pos ^._y)
+  Nothing -> False
+
 stepCrewAction :: Maybe [(Int,Int)] -> CrewState -> Step CrewAction
 stepCrewAction movesToDo cs = case ca of
   CrewAction'Idle -> case movesToDo of

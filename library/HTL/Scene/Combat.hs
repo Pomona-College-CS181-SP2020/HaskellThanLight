@@ -28,15 +28,28 @@ class Monad m => Combat m where
 combatStep' :: (HasCombatVars s, MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m, Control.Monad.IO.Class.MonadIO m) => m ()
 combatStep' = do
   input <- getInput
+  updateScene
+  -- updateCombat
+  drawCombat
+  updateCursor (iMousePos input)
+
+modifyCombatVars :: (MonadState s m, HasCombatVars s) => (CombatVars -> CombatVars) -> m ()
+modifyCombatVars f = modify $ combatVars %~ f
+
+updateScene ::  (HasCombatVars s, MonadReader Config m, MonadState s m, Renderer m, HasInput m, SceneManager m, Control.Monad.IO.Class.MonadIO m) => m ()
+updateScene = do
+  input <- getInput
   -- for testing gameover screen
   when (clickAabb (iMouseLeft input) (0,0) (200,200)) (toScene Scene'GameOver)
-
-  drawCombat
   when (clickAabb (iMouseLeft input) (304, 614) (96, 40)) (weaponSelected)
   when (clickAabb (iMouseLeft input) (928, 96) (288, 448)) (weaponFired)
   when (clickAabb (iMouseRight input) (0, 0) (1280, 720)) (deselect)
-  updateCursor (iMousePos input)
-  
+
+-- updateCombat :: (HasCombatVars s, MonadState s m, Renderer m, HasInput m) => m ()
+-- updateCombat = do
+--   input <- getInput
+--   CombatVars{cvCrewStates} <- gets (view combatVars)
+--   mapM_ updateEachCrew cvCrewStates
 
 drawCombat :: (MonadState s m, HasCombatVars s, Renderer m) => m ()
 drawCombat = do
@@ -63,6 +76,11 @@ drawEachCrew (cState, cAnim) = do
   let crewLoc = Animate.currentLocation crewAnimations cAnim
   drawCrew crewLoc $ csPos cState
 
+-- updateEachCrew :: (HasCombatVars s, MonadState s m, Renderer m, HasInput m) => CrewState -> m ()
+-- updateCrew cState = do 
+--   input <- getInput
+--   let crewSelected = crewAabb (iMouseLeft input) cState
+
 updateCursor :: (MonadState s m, HasCombatVars s, Renderer m, HasInput m) => Maybe (Point V2 Int32) -> m ()
 updateCursor Nothing = do
   CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnims} <- gets (view combatVars)
@@ -77,11 +95,7 @@ drawWeaponPointer pos = do
   let x = fromIntegral (pos ^._x)
   let y = fromIntegral (pos ^._y)
   drawWpnPtr (x, y)
-  
 
-modifyCombatVars :: (MonadState s m, HasCombatVars s) => (CombatVars -> CombatVars) -> m ()
-modifyCombatVars f = modify $ combatVars %~ f
-  
 weaponSelected :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 weaponSelected = do
   modifyCombatVars $ \cv -> cv { cvWeaponSelected = True }
@@ -99,7 +113,11 @@ weaponFired = do
 
 shootEnemy :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 shootEnemy = do
-  --damage enemy ship
+  CombatVars{cvEnemyHull} <- gets (view combatVars)
+  modifyCombatVars $ \cv -> cv { cvEnemyHull = (clamp (cvEnemyHull-randomDamage) 0 1)}
   deselect
+
+randomDamage :: Float
+randomDamage = 0.1 -- make this actually random
 
 --TODO: if right click when weapon selected, then unselect
