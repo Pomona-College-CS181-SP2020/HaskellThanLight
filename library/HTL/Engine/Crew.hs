@@ -123,7 +123,7 @@ stepCrewState selectClick targetTile cs = case stepCa of
         Just (_:m:ms) -> CrewState selected ca health nextPos m (Just (m:ms)) -- still moves to do
           where nextPos = moveTowards (csPos cs) (findPositionByTile floorKestrel m)
         _ -> error "should have at least one move in a sustain step."
-      else CrewState selected ca health movePos nextTile movePath
+      else CrewState selected ca health movePos nextTile (csMoves cs)
   where
     movePath = case targetTile of
       Just tT -> findShortestPath floorKestrel (csCurTile cs) tT
@@ -145,11 +145,11 @@ cSpeed = 1
 -- return: newPos
 moveTowards :: (Int,Int) -> (Int,Int) -> (Int,Int)
 moveTowards (cX,cY) (tX,tY) = 
-  if dX < 0
-  then if dY < 0
-    then (intClamp (cX - cSpeed) cX tX, intClamp (cY - cSpeed) cY tY)
-    else (intClamp (cX - cSpeed) cX tX, intClamp (cY + cSpeed) cY tY)
-  else if dY < 0
-    then (intClamp (cX + cSpeed) cX tX, intClamp (cY - cSpeed) cY tY)
-    else (intClamp (cX + cSpeed) cX tX, intClamp (cY + cSpeed) cY tY)
+  if dX > 0
+  then if dY > 0
+    then (intClamp (cX + cSpeed) cX tX, intClamp (cY + cSpeed) cY tY)
+    else (intClamp (cX + cSpeed) cX tX, intClamp (cY - cSpeed) tY cY)
+  else if dY > 0
+    then (intClamp (cX - cSpeed) tX cX, intClamp (cY + cSpeed) cY tY)
+    else (intClamp (cX - cSpeed) tX cX, intClamp (cY - cSpeed) tY cY)
   where (dX, dY) = (tX - cX, tY - cY)

@@ -3,19 +3,23 @@ Problem: crew not moving properly towards right and down. Working for left and u
 
 Who: Gabriel
 
+2020-05-07 There was a mitake in the use of intClamp in the movetwards function, but fixing revealed that moving in any direction is broken.
+
+2020-05-07 Fixed issue: Sustain'Move case was removing the movelist. Now it keeps the movelist and all movement works!
+
 # BUG 2020-05-06 #3
 Problem: crew movement missaligns if order is issued mid movement. Will attempt fix by forcing to finish current move; how implementation will proceed is still unknown.
 
 Who: Gabriel
 
-2020-03-07 Fixed by setting current tile as the tile we are moving to and including current tile as first move in move path.
+2020-05-07 Fixed by setting current tile as the tile we are moving to and including current tile as first move in move path.
 
 # BUG 2020-05-05 #2
 Problem: issue modifying crew stateful variables after introducing more than one crew member. Likely to create a wrapper around it.
 
 Who: Gabriel
 
-2020-03-07 Fixed by handling every update on the stepCrewState function and mapping it over the states of the crew members.
+2020-05-07 Fixed by handling every update on the stepCrewState function and mapping it over the states of the crew members.
 
 # BUG 2020-04-30 #1
 
