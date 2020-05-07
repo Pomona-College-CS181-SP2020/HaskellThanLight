@@ -1,12 +1,21 @@
+# BUG 2020-05-07 #3
+Problem: crew not moving properly towards right and down. Working for left and up.
+
+Who: Gabriel
+
 # BUG 2020-05-06 #3
 Problem: crew movement missaligns if order is issued mid movement. Will attempt fix by forcing to finish current move; how implementation will proceed is still unknown.
 
 Who: Gabriel
 
+2020-03-07 Fixed by setting current tile as the tile we are moving to and including current tile as first move in move path.
+
 # BUG 2020-05-05 #2
 Problem: issue modifying crew stateful variables after introducing more than one crew member. Likely to create a wrapper around it.
 
 Who: Gabriel
+
+2020-03-07 Fixed by handling every update on the stepCrewState function and mapping it over the states of the crew members.
 
 # BUG 2020-04-30 #1
 
