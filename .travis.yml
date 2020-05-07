@@ -14,6 +14,11 @@ addons:
   apt:
     packages:
       - libgmp-dev
+      - libsdl2-dev 
+      - libsdl2-ttf-dev
+      - libsdl2-image-dev
+      - libmikmod-dev
+      - libsdl2-mixer-dev
 
 
 before_install:
