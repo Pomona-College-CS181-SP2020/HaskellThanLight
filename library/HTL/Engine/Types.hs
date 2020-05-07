@@ -15,3 +15,6 @@ newtype Percent = Percent Float
 
 clamp :: (Fractional a, Ord a) => a -> a -> a -> a
 clamp cur min' max' = if cur > max' then max' else (if cur < min' then min' else cur)
+
+intClamp :: (Integral a, Ord a) => a -> a -> a -> a
+intClamp cur min' max' = if cur > max' then max' else (if cur < min' then min' else cur)

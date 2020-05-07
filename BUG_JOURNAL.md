@@ -1,8 +1,12 @@
 # BUG 2020-05-06 #3
 Problem: crew movement missaligns if order is issued mid movement. Will attempt fix by forcing to finish current move; how implementation will proceed is still unknown.
 
+Who: Gabriel
+
 # BUG 2020-05-05 #2
 Problem: issue modifying crew stateful variables after introducing more than one crew member. Likely to create a wrapper around it.
+
+Who: Gabriel
 
 # BUG 2020-04-30 #1
 
