@@ -18,6 +18,7 @@ import HTL.Engine.Combat
 import HTL.Engine.Frame
 import HTL.Engine.Input
 import HTL.Engine.Types
+import HTL.Engine.Floor
 import HTL.Engine.Crew
 import HTL.Manager.Input
 import HTL.Manager.Scene
@@ -29,7 +30,7 @@ combatStep' :: (HasCombatVars s, MonadReader Config m, MonadState s m, Renderer 
 combatStep' = do
   input <- getInput
   updateScene
-  -- updateCombat
+  updateCombat
   drawCombat
   updateCursor (iMousePos input)
 
@@ -45,11 +46,16 @@ updateScene = do
   when (clickAabb (iMouseLeft input) (928, 96) (288, 448)) (weaponFired)
   when (clickAabb (iMouseRight input) (0, 0) (1280, 720)) (deselect)
 
--- updateCombat :: (HasCombatVars s, MonadState s m, Renderer m, HasInput m) => m ()
--- updateCombat = do
---   input <- getInput
---   CombatVars{cvCrewStates} <- gets (view combatVars)
---   mapM_ updateEachCrew cvCrewStates
+updateCombat :: (HasCombatVars s, MonadState s m, Renderer m, HasInput m) => m ()
+updateCombat = do
+  input <- getInput
+  -- crew update
+  crewAnimations <- getCrewAnimations
+  CombatVars{cvCrewStates, cvCrewAnims} <- gets (view combatVars)
+  let targetTile = findTileByPosition floorKestrel (iMouseRight input)
+  let newCrewStates = map (stepCrewState (iMouseLeft input) targetTile) cvCrewStates
+  let newCrewAnims = zipWith ($) (map (stepCrewAnim crewAnimations) cvCrewStates) cvCrewAnims
+  modifyCombatVars $ \cv -> cv { cvCrewStates = newCrewStates, cvCrewAnims = newCrewAnims }
 
 drawCombat :: (MonadState s m, HasCombatVars s, Renderer m) => m ()
 drawCombat = do
