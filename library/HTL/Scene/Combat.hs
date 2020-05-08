@@ -45,6 +45,7 @@ updateScene = do
   when (clickAabb (iMouseLeft input) (304, 614) (96, 40)) (weaponSelected)
   when (clickAabb (iMouseLeft input) (928, 96) (288, 448)) (weaponFired)
   when (clickAabb (iMouseRight input) (0, 0) (1280, 720)) (deselect)
+  checkVictory
 
 updateCombat :: (HasCombatVars s, MonadState s m, Renderer m, HasInput m) => m ()
 updateCombat = do
@@ -88,10 +89,10 @@ drawEachCrew (cState, cAnim) = do
 
 updateCursor :: (MonadState s m, HasCombatVars s, Renderer m, HasInput m) => Maybe (Point V2 Int32) -> m ()
 updateCursor Nothing = do
-  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnims} <- gets (view combatVars)
+  CombatVars{cvWeaponSelected, cvLastMousePos} <- gets (view combatVars)
   when cvWeaponSelected (drawWeaponPointer cvLastMousePos)
 updateCursor (Just pos) = do 
-  CombatVars{cvHull, cvWeaponSelected, cvLastMousePos, cvCrewAnims} <- gets (view combatVars)
+  CombatVars{cvWeaponSelected, cvLastMousePos} <- gets (view combatVars)
   when cvWeaponSelected (drawWeaponPointer pos)
   modifyCombatVars $ \cv -> cv { cvLastMousePos = pos }
 
@@ -113,7 +114,7 @@ deselect = do
 
 weaponFired :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
 weaponFired = do
-  CombatVars{cvHull, cvWeaponSelected, cvCrewAnims} <- gets (view combatVars)
+  CombatVars{cvWeaponSelected} <- gets (view combatVars)
   when cvWeaponSelected shootEnemy  
 
 shootEnemy :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m) => m ()
@@ -123,5 +124,9 @@ shootEnemy = do
   deselect
 
 randomDamage :: Float
-randomDamage = 0.1 -- make this actually random
+randomDamage = 0.3 -- make this actually random
 
+checkVictory :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m, SceneManager m) => m()
+checkVictory = do
+  CombatVars{cvEnemyHull} <- gets (view combatVars)
+  when (cvEnemyHull == 0) (toScene Scene'Victory)

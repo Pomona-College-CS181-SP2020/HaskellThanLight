@@ -26,6 +26,7 @@ import HTL.Runner
 import HTL.Scene.Combat
 import HTL.Scene.MainMenu
 import HTL.Scene.GameOver
+import HTL.Scene.Victory
 import HTL.State
 
 main :: IO ()
@@ -96,6 +97,7 @@ instance Renderer HTL where
   drawMark =  drawTextureSprite (rMarkSprite . cResources)
   drawGameOverBox = drawTextureSprite (rGameOverSprite . cResources)
   drawWpnPtr = drawTextureSprite (rWpnPtrSprite . cResources)
+  drawVictoryBox = drawTextureSprite (rVictorySprite . cResources)
 
 instance Combat HTL where
   combatStep = combatStep'
@@ -105,6 +107,9 @@ instance MainMenu HTL where
 
 instance GameOver HTL where
   gameOverStep = gameOverStep'
+
+instance Victory HTL where
+  victoryStep = victoryStep'
 
 instance CameraControl HTL where
   adjustCamera = adjustCamera'
