@@ -124,7 +124,7 @@ shootEnemy = do
   deselect
 
 randomDamage :: Float
-randomDamage = 0.3 -- make this actually random
+randomDamage = 0.3 -- TODO: make this actually random
 
 checkVictory :: (MonadState s m, HasCombatVars s, Control.Monad.IO.Class.MonadIO m, SceneManager m) => m()
 checkVictory = do

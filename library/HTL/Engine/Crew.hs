@@ -79,29 +79,6 @@ stepCrewAction potPath cs = case ca of
       Nothing -> Step'Change ca CrewAction'Idle
   where ca = csAction cs
         isPath = isJust potPath
-        
-
--- stepCrewAction :: Maybe [(Int,Int)] -> CrewState -> Step CrewAction
--- stepCrewAction movesToDo cs = case ca of
---   CrewAction'Idle -> case movesToDo of
---     Just _ -> Step'Change ca CrewAction'Move
---     Nothing -> Step'Sustain ca
---   CrewAction'Move -> case movesToDo of
---     Just _ -> Step'Sustain CrewAction'Move
---     Nothing -> case csMoves cs of
---       Just _ -> Step'Sustain CrewAction'Move
---       Nothing -> Step'Change ca CrewAction'Idle
---   where ca = csAction cs
-
--- stepCrewAction :: Input -> CrewState -> Step CrewAction
--- stepCrewAction input cs = case ca of
---   CrewAction'Idle -> case csMoves cs of
---     Just csm -> Step'Change ca CrewAction'Move
---     Nothing -> Step'Sustain CrewAction'Idle
---   CrewAction'Move -> case csMoves cs of
---     Just csm -> Step'Sustain CrewAction'Move
---     Nothing -> Step'Change ca CrewAction'Idle
---   where ca = csAction cs
 
 -- args: change in action, if selected on frame, current state
 -- returns: updated state
@@ -110,11 +87,6 @@ stepCrewState selectClick targetTile cs = case stepCa of
   Step'Change _ ca -> case ca of
     CrewAction'Idle -> CrewState selected ca health (csPos cs) (csCurTile cs) Nothing
     CrewAction'Move -> CrewState selected ca health movePos nextTile movePath
-      -- CrewAction'Idle -> CrewState selected ca health movePos nextTile movePath -- start move
-      -- CrewAction'Move -> if findPositionByTile (csCurTile cs) == (csPos cs) -- check if done with current step
-      --   then CrewState selected ca health movePos nextTile movePath -- regular move
-      --   else CrewState selected ca health movePos nextTile movePath -- merge move
-      --     where mergePath = Just (csCurTile cs : $ fromJust movePath)
   Step'Sustain ca -> case ca of
     CrewAction'Idle -> CrewState selected ca health (csPos cs) (csCurTile cs) Nothing --stay the same
     CrewAction'Move -> if findPositionByTile floorKestrel (csCurTile cs) == (csPos cs) --check if done with current step
