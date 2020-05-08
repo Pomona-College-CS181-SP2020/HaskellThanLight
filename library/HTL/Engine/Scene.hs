@@ -5,4 +5,5 @@ data Scene
   | Scene'Menu
   | Scene'GameOver
   | Scene'Quit
+  | Scene'Victory
   deriving (Show, Eq)

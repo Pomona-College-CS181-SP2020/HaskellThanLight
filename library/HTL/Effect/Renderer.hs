@@ -35,6 +35,7 @@ class Monad m => Renderer m where
   drawMark :: (Int,Int) -> m()
   drawGameOverBox :: (Int,Int) -> m()
   drawWpnPtr :: (Int, Int) -> m ()
+  drawVictoryBox :: (Int, Int) -> m ()
 
 clearScreen' :: (SDLRenderer m, MonadReader Config m) => m ()
 clearScreen' = do
