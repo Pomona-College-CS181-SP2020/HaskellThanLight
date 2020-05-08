@@ -50,12 +50,12 @@ updateCombat :: (HasCombatVars s, MonadState s m, Renderer m, HasInput m) => m (
 updateCombat = do
   input <- getInput
   -- crew update
-  CombatVars{cvCrewStates} <- gets (view combatVars)
+  crewAnimations <- getCrewAnimations
+  CombatVars{cvCrewStates, cvCrewAnims} <- gets (view combatVars)
   let targetTile = findTileByPosition floorKestrel (iMouseRight input)
-  -- let cActions = map stepCrewAction targetTile cvCrewStates
   let newCrewStates = map (stepCrewState (iMouseLeft input) targetTile) cvCrewStates
-  -- when (newCrewStates == cvCrewStates) (drawJumpButton (200, 200))
-  modifyCombatVars $ \cv -> cv { cvCrewStates = newCrewStates }
+  let newCrewAnims = zipWith ($) (map (stepCrewAnim crewAnimations) cvCrewStates) cvCrewAnims
+  modifyCombatVars $ \cv -> cv { cvCrewStates = newCrewStates, cvCrewAnims = newCrewAnims }
 
 drawCombat :: (MonadState s m, HasCombatVars s, Renderer m) => m ()
 drawCombat = do

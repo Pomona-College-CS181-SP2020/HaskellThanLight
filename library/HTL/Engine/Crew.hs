@@ -138,6 +138,26 @@ stepCrewState selectClick targetTile cs = case stepCa of
       _ -> (csCurTile cs) -- maintain tile otherwise
     movePos = moveTowards (csPos cs) (findPositionByTile floorKestrel nextTile)
 
+stepCrewAnim :: Animations CrewKey -> CrewState -> Animate.Position CrewKey Seconds -> Animate.Position CrewKey Seconds
+stepCrewAnim anims cs animstep = case ca of
+  CrewAction'Idle -> Animate.initPosition CrewKey'Idle
+  CrewAction'Move ->  if ck == targetAnim
+    then Animate.stepPosition anims animstep frameDeltaSeconds
+    else Animate.initPosition targetAnim
+  where ca = csAction cs
+        ck = Animate.pKey animstep
+        targetPos = findPositionByTile floorKestrel (csCurTile cs)
+        targetAnim = whichMoveAnim (csPos cs) targetPos ck
+
+whichMoveAnim :: (Int,Int) -> (Int,Int) -> CrewKey -> CrewKey
+whichMoveAnim (cX,cY) (tX,tY) ck =
+  if dX > 0 then CrewKey'Right
+  else if dX < 0 then CrewKey'Left
+  else if dY > 0 then CrewKey'Down
+  else if dY < 0 then CrewKey'Up
+  else ck -- default case
+  where (dX, dY) = (tX - cX, tY - cY)
+
 cSpeed :: Int
 cSpeed = 1
 

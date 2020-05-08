@@ -1,4 +1,9 @@
-# BUG 2020-05-07 #3
+# BUG 2020-05-07 #5
+Problem: two crew members can go into same tile and then they get stuck together forever. Will fix this by preventing two crew members from moving into the same tile through some stateful variable.
+
+Who: Gabriel
+
+# BUG 2020-05-07 #4
 Problem: crew not moving properly towards right and down. Working for left and up.
 
 Who: Gabriel

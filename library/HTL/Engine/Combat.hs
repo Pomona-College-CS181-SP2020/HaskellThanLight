@@ -31,10 +31,10 @@ initCombatVars = CombatVars
     [ initCrewState floorKestrel (5,2)
     , initCrewState floorKestrel (8,3)
     , initCrewState floorKestrel (14,2)
-    ] -- testing three crew members
+    ] -- three crew members
   , cvCrewAnims =
     [ Animate.initPosition CrewKey'Idle
     , Animate.initPosition CrewKey'Idle
     , Animate.initPosition CrewKey'Idle
-    ]
+    ] -- three crew member anims
   }
