@@ -21,6 +21,7 @@ import HTL.Manager.Scene
 import HTL.Scene.Combat
 import HTL.Scene.MainMenu
 import HTL.Scene.GameOver
+import HTL.Scene.Victory
 
 import HTL.State
 
@@ -37,6 +38,10 @@ gameOverTransition :: (MonadState a m, CameraControl m) => m ()
 gameOverTransition = do
   adjustCamera initCamera
 
+victoryTransition :: (MonadState a m, CameraControl m) => m ()
+victoryTransition = do
+  adjustCamera initCamera
+
 toScene' :: MonadState Vars m => Scene -> m ()
 toScene' scene = modify (\v -> v { vNextScene = scene })
 
@@ -51,6 +56,7 @@ mainLoop ::
   , Combat m
   , MainMenu m
   , GameOver m
+  , Victory m
   ) => m ()
 mainLoop = do
   updateInput
@@ -71,6 +77,7 @@ mainLoop = do
         Scene'Combat -> combatStep
         Scene'Menu -> menuStep
         Scene'GameOver -> gameOverStep
+        Scene'Victory -> victoryStep
         Scene'Quit -> return ()
 
     stepScene scene nextScene = do
@@ -79,5 +86,6 @@ mainLoop = do
           Scene'Combat -> combatTransition
           Scene'Menu -> menuTransition
           Scene'GameOver -> gameOverTransition
+          Scene'Victory -> victoryTransition
           Scene'Quit -> return ()
         modify (\v -> v { vScene = nextScene })
